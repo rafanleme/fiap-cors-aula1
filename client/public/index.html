@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="btnCursos">Buscar Cursos</button>
+    <br /><br />
+    <div id="cursos">
+
+    </div>
+    <br /><br />
+    <input id="nomeCurso" placeholder="Nome do Curso" />
+    <br />
+    <input id="chCurso" placeholder="Carga Horária" />
+    <br />
+    <button id="btnNovoCurso">Adicionar Curso</button>
+
+    <script>
+        document.getElementById("btnCursos").addEventListener("click", async () => {
+            try {
+                const response = await fetch("http://localhost:3333/cursos");
+
+                const cursos = await response.json();
+
+                const listaCursos = cursos.map(c => `<li>${c.nome}</li>` );
+
+                 const divCrusos = document.getElementById("cursos");
+
+                 console.log(listaCursos);
+
+                 divCrusos.innerHTML = listaCursos.join("");
+                
+                
+            } catch (error) {
+                console.error(error);
+            }
+        });
+
+        document.getElementById("btnNovoCurso").addEventListener("click", async () => {
+            try {
+                const nome = document.getElementById("nomeCurso").value;
+                const ch = document.getElementById("chCurso").value;
+
+                const response = await fetch("http://localhost:3333/cursos", {
+                    method: "POST",
+                    headers: {
+                        ["content-type"]: "application/json"
+                    },
+                    body: JSON.stringify({nome, ch})
+                });
+
+                console.log(response);
+            } catch (error) {
+                console.error(error);
+            }
+            
+        });
+
+    </script>
+</body>
+</html>
